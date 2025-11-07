@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Asistencias</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/a2d9b6a2b8.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <header>
+        <div class="logo">
+            <i class="fa-solid fa-clipboard-list"></i>
+            <h1>Sistema de Asistencias</h1>
+        </div>
+    </header>
+
+
+    <div class="container">
+        <aside class="sidebar">
+            <button class="nav-item" data-section="dashboard">
+                <i class="fa-solid fa-user"></i> Dashboard
+            </button>
+            <button class="nav-item active" data-section="asistencia">
+                <i class="fa-solid fa-calendar-check"></i> Tomar Asistencia
+            </button>
+            <button class="nav-item" data-section="historial">
+                <i class="fa-solid fa-file-lines"></i> Historial
+            </button>
+            <button class="nav-item" data-section="configuracion">
+                <i class="fa-solid fa-gear"></i> Configuración
+            </button>
+        </aside>
+
+
+        <main class="content hidden" id="dashboard">
+            <div class="stats">
+                <div class="card present">
+                    <p>Presentes Hoy</p>
+                    <h2>142</h2>
+                    <i class="fa-solid fa-check"></i>
+                </div>
+                <div class="card absent">
+                    <p>Ausentes Hoy</p>
+                    <h2>12</h2>
+                    <i class="fa-solid fa-xmark"></i>
+                </div>
+                <div class="card late">
+                    <p>Llegadas Tarde</p>
+                    <h2>8</h2>
+                    <i class="fa-solid fa-clock"></i>
+                </div>
+            </div>
+            <div class="courses">
+                <h3>Cursos</h3>
+                <div class="course-grid">
+                    <div class="course-card">1° Año - División A <span>28 estudiantes</span><i
+                            class="fa-solid fa-users"></i></div>
+                    <div class="course-card">2° Año - División A <span>30 estudiantes</span><i
+                            class="fa-solid fa-users"></i></div>
+                    <div class="course-card">3° Año - División B <span>25 estudiantes</span><i
+                            class="fa-solid fa-users"></i></div>
+                    <div class="course-card">4° Año - División A <span>27 estudiantes</span><i
+                            class="fa-solid fa-users"></i></div>
+                    <div class="course-card">5° Año - División B <span>24 estudiantes</span><i
+                            class="fa-solid fa-users"></i></div>
+                </div>
+            </div>
+        </main>
+
+
+        <main class="content" id="asistencia">
+            <h2>Tomar Asistencia</h2>
+            <div class="attendance-controls">
+                <div class="control-group">
+                    <label for="curso">Seleccionar Curso</label>
+                    <select id="curso" class="custom-select">
+                        <option>1° Año - División A</option>
+                        <option>2° Año - División A</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label for="fecha">Fecha</label>
+                    <div class="date-input-container">
+                        <input type="text" id="fecha" value="" class="date-input">
+                        <i class="fa-solid fa-calendar-alt date-icon"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="attendance-legend">
+                <div class="legend-item"><span class="present-box"></span> Presente</div>
+                <div class="legend-item"><span class="absent-box"></span> Ausente</div>
+                <div class="legend-item"><span class="late-box"></span> Tarde</div>
+            </div>
+
+            <div class="student-list">
+                <div class="student-item">
+                    <span>González, Juan Pablo</span>
+                    <div class="attendance-actions">
+                        <button class="status-btn present-status"><i class="fa-solid fa-check"></i></button>
+                        <button class="status-btn absent-status"><i class="fa-solid fa-xmark"></i></button>
+                        <button class="status-btn late-status"><i class="fa-solid fa-clock"></i></button>
+                    </div>
+                </div>
+                <div class="student-item">
+                    <span>Martinez, María Laura</span>
+                    <div class="attendance-actions">
+                        <button class="status-btn present-status"><i class="fa-solid fa-check"></i></button>
+                        <button class="status-btn absent-status"><i class="fa-solid fa-xmark"></i></button>
+                        <button class="status-btn late-status"><i class="fa-solid fa-clock"></i></button>
+                    </div>
+                </div>
+                <div class="student-item">
+                    <span>Rodríguez, Carlos Alberto</span>
+                    <div class="attendance-actions">
+                        <button class="status-btn present-status"><i class="fa-solid fa-check"></i></button>
+                        <button class="status-btn absent-status"><i class="fa-solid fa-xmark"></i></button>
+                        <button class="status-btn late-status"><i class="fa-solid fa-clock"></i></button>
+                    </div>
+                </div>
+            </div>
+
+
+        </main>
+
+
+        <main class="content hidden" id="historial">
+            <h2>Historial</h2>
+        </main>
+
+
+        <main class="content hidden" id="configuracion">
+            <h2>Configuración del Sistema</h2>
+
+            <div class="config-section">
+                <h3>Gestión de Cursos</h3>
+                <button class="btn btn-blue">Agregar Nuevo Curso</button>
+            </div>
+
+            <hr>
+
+            <div class="config-section">
+                <h3>Gestión de Estudiantes</h3>
+                <button class="btn btn-green">Agregar Estudiante</button>
+                <button class="btn btn-gray">Importar desde Excel</button>
+            </div>
+        </main>
+
+    </div>
+
+
+    <script src="index.js"></script>
+</body>
+
+</html>
