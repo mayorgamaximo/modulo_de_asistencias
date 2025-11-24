@@ -279,14 +279,13 @@ header .logo i {
 
 
 .date-input-container {
-    position: relative;
     display: flex;
     align-items: center;
 }
 
 
 .date-input {
-    padding: 10px 15px;
+    
     border: 1px solid #e2e8f0;
     border-radius: 8px;
     background-color: white;
@@ -297,7 +296,7 @@ header .logo i {
     text-align: left;
     cursor: pointer;
     outline: none;
-    padding-right: 40px;
+    padding: 10px;
 }
 
 
@@ -493,3 +492,89 @@ hr {
     border-top: 1px solid #e2e8f0;
     margin: 1.5rem 0;
 }
+
+/* Historial styles */
+.historial-controls {
+    display: flex;
+    gap: 20px;
+    align-items: flex-end;
+    margin-bottom: 1rem;
+}
+
+.historial-list {
+    display: flex;
+    flex-direction: column;
+    gap: 18px; /* más espacio vertical entre tarjetas */
+    margin-top: 8px;
+}
+
+.historial-card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 12px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+
+.historial-card-header {
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #0f172a;
+}
+
+.historial-card-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.historial-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 10px;
+    border-radius: 8px;
+    background: #f8fafc;
+}
+
+.hist-cell.name { font-weight: 600; color: #0f172a; }
+.hist-cell.estado { color: #334155; }
+
+/* Dark card + inner white box style (like the provided mock) */
+.card-dark {
+    background: #0b1220; /* dark */
+    border: 1px solid rgba(255,255,255,0.12);
+    color: #e6eef8;
+}
+
+.course-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+}
+
+.course-title { font-weight: 700; font-size: 16px; color: #0f172a; }
+.course-date { font-size: 13px; color: #64748b; }
+
+.historial-inner-box {
+    background: #f8fafc; /* tono claro consistente con la página */
+    margin: 12px 12px 12px 12px;
+    padding: 12px;
+    border-radius: 6px;
+}
+
+.historial-row.inner-row {
+    background: transparent;
+    padding: 12px 10px;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid rgba(14,20,30,0.04);
+}
+
+.historial-card .hist-cell.name { color: #0f172a; font-weight: 600; }
+.historial-card .hist-cell.estado { color: #334155; }
+
+

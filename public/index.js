@@ -1,8 +1,8 @@
 const navItems = document.querySelectorAll('.nav-item');
 const sections = document.querySelectorAll('.content');
-const statusButtons = document.querySelectorAll('.status-btn');
 const dateInput = document.getElementById('fecha');
 const dateIcon = document.querySelector('.date-icon');
+// student list is handled by the tomar_asistencia module
 
 
 function getTodayDateFormatted() {
@@ -21,6 +21,9 @@ if (dateIcon) {
 }
 
 
+// loadStudents is handled inside `modulos/tomar_asistencia.js`
+
+
 navItems.forEach(btn => {
     btn.addEventListener('click', () => {
         navItems.forEach(b => b.classList.remove('active'));
@@ -31,38 +34,11 @@ navItems.forEach(btn => {
         sections.forEach(sec => sec.classList.add('hidden'));
         document.getElementById(target).classList.remove('hidden');
        
-        if (target === 'asistencia') {
-            const firstStudentPresentBtn = document.querySelector('.student-item:first-child .present-status');
-            const allFirstStudentBtns = document.querySelectorAll('.student-item:first-child .status-btn');
-            let isAnySelected = false;
-            allFirstStudentBtns.forEach(b => {
-                if(b.classList.contains('active-status')) isAnySelected = true;
-            });
-
-
-            if (firstStudentPresentBtn && !isAnySelected) {
-                firstStudentPresentBtn.classList.add('active-status');
-            }
-        }
+        // nothing special here; the course module will dispatch `cursoChanged` events
     });
 });
 
-
-statusButtons.forEach(button => {
-    button.addEventListener('click', (e) => {
-        const actionsContainer = e.currentTarget.closest('.attendance-actions');
-       
-        if (actionsContainer) {
-            const siblingButtons = actionsContainer.querySelectorAll('.status-btn');
-           
-            siblingButtons.forEach(btn => {
-                btn.classList.remove('active-status');
-            });
-           
-            e.currentTarget.classList.add('active-status');
-        }
-    });
-});
+// El módulo `modulos/tomar_asistencia.js` se encarga ahora de cargar y mostrar alumnos
 
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -75,12 +51,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     if (dateInput) {
-        dateInput.value = getTodayDateFormatted();
+        // if input is native date, set ISO value yyyy-mm-dd so calendar shows today
+        if (dateInput.type === 'date') {
+            dateInput.value = new Date().toISOString().slice(0, 10);
+        } else {
+            dateInput.value = getTodayDateFormatted();
+        }
     }
 
-
-    const firstStudentPresentBtn = document.querySelector('.student-item:first-child .present-status');
-    if (firstStudentPresentBtn) {
-        firstStudentPresentBtn.classList.add('active-status');
-    }
+    // initial load will be triggered by the course module via `cursoChanged`
 });

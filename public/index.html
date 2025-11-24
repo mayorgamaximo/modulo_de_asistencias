@@ -76,52 +76,49 @@
             <h2>Tomar Asistencia</h2>
             <div class="attendance-controls">
                 <div class="control-group">
-                    <label for="curso">Seleccionar Curso</label>
-                    <select id="curso" class="custom-select">
-                        <option>1° Año - División A</option>
-                        <option>2° Año - División A</option>
+                    <label for="curso-anio">Año (Curso)</label>
+                    <select id="curso-anio" class="custom-select">
+                        <option value="">Cargando...</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label for="curso-division">División</label>
+                    <select id="curso-division" class="custom-select">
+                        <option value="">Cargando...</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label for="turno">Turno</label>
+                    <select id="turno" class="custom-select">
+                        <option value="">Seleccione turno</option>
+                        <option value="mañana">Mañana</option>
+                        <option value="tarde">Tarde</option>
+                        <option value="vespertino">Vespertino</option>
                     </select>
                 </div>
                 <div class="control-group">
                     <label for="fecha">Fecha</label>
                     <div class="date-input-container">
-                        <input type="text" id="fecha" value="" class="date-input">
+                        <input type="date" id="fecha" value="" class="date-input">
                         <i class="fa-solid fa-calendar-alt date-icon"></i>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label>&nbsp;</label>
+                    <div>
+                        <button id="enviar-asistencias" class="btn btn-blue">Enviar Asistencias</button>
                     </div>
                 </div>
             </div>
 
             <div class="attendance-legend">
                 <div class="legend-item"><span class="present-box"></span> Presente</div>
-                <div class="legend-item"><span class="absent-box"></span> Ausente</div>
                 <div class="legend-item"><span class="late-box"></span> Tarde</div>
+                <div class="legend-item"><span class="absent-box"></span> Ausente</div>
             </div>
 
             <div class="student-list">
-                <div class="student-item">
-                    <span>González, Juan Pablo</span>
-                    <div class="attendance-actions">
-                        <button class="status-btn present-status"><i class="fa-solid fa-check"></i></button>
-                        <button class="status-btn absent-status"><i class="fa-solid fa-xmark"></i></button>
-                        <button class="status-btn late-status"><i class="fa-solid fa-clock"></i></button>
-                    </div>
-                </div>
-                <div class="student-item">
-                    <span>Martinez, María Laura</span>
-                    <div class="attendance-actions">
-                        <button class="status-btn present-status"><i class="fa-solid fa-check"></i></button>
-                        <button class="status-btn absent-status"><i class="fa-solid fa-xmark"></i></button>
-                        <button class="status-btn late-status"><i class="fa-solid fa-clock"></i></button>
-                    </div>
-                </div>
-                <div class="student-item">
-                    <span>Rodríguez, Carlos Alberto</span>
-                    <div class="attendance-actions">
-                        <button class="status-btn present-status"><i class="fa-solid fa-check"></i></button>
-                        <button class="status-btn absent-status"><i class="fa-solid fa-xmark"></i></button>
-                        <button class="status-btn late-status"><i class="fa-solid fa-clock"></i></button>
-                    </div>
-                </div>
+                
             </div>
 
 
@@ -130,6 +127,47 @@
 
         <main class="content hidden" id="historial">
             <h2>Historial</h2>
+            <div class="historial-controls">
+                <div class="control-group">
+                    <label for="hist-filter-anio">Año</label>
+                    <select id="hist-filter-anio" class="custom-select">
+                        <option value="">Todos</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label for="hist-filter-division">División</label>
+                    <select id="hist-filter-division" class="custom-select">
+                        <option value="">Todas</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label for="hist-filter-fecha">Fecha</label>
+                    <div class="date-input-container">
+                        <input type="date" id="hist-filter-fecha" class="date-input">
+                        <i class="fa-solid fa-calendar-alt date-icon"></i>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label for="hist-filter-turno">Turno</label>
+                    <select id="hist-filter-turno" class="custom-select">
+                        <option value="">Todos</option>
+                        <option value="mañana">Mañana</option>
+                        <option value="tarde">Tarde</option>
+                        <option value="vespertino">Vespertino</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label>&nbsp;</label>
+                    <div>
+                        <button id="hist-filter-btn" class="btn btn-blue">Filtrar</button>
+                        <button id="hist-clear-btn" class="btn btn-gray">Limpiar</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="historial-list">
+                <!-- tarjetas de historial se insertarán aquí -->
+            </div>
         </main>
 
 
@@ -144,9 +182,9 @@
             <hr>
 
             <div class="config-section">
-                <h3>Gestión de Estudiantes</h3>
-                <button class="btn btn-green">Agregar Estudiante</button>
-                <button class="btn btn-gray">Importar desde Excel</button>
+                <h3>Gestión de preceptores</h3>
+                <button class="btn btn-green">Agregar preceptor</button>
+                
             </div>
         </main>
 
@@ -154,6 +192,8 @@
 
 
     <script src="index.js"></script>
+    <script src="modulos/tomar_asistencia.js"></script>
+    <script src="modulos/historial.js"></script>
 </body>
 
 </html>
