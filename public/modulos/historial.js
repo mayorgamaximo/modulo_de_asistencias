@@ -141,6 +141,7 @@
         if (anioSelect) anioSelect.value = '';
         if (divisionSelect) divisionSelect.value = '';
         if (fechaInput) fechaInput.value = '';
+        if (turnoSelect) turnoSelect.value = ''; // seleccionar 'Todos' en Turno
         loadHistorial();
     });
 

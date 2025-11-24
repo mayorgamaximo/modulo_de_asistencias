@@ -74,7 +74,7 @@
 
         <main class="content" id="asistencia">
             <h2>Tomar Asistencia</h2>
-            <div class="attendance-controls">
+            <div class="attendance-controls fila-controles">
                 <div class="control-group">
                     <label for="curso-anio">Año (Curso)</label>
                     <select id="curso-anio" class="custom-select">
@@ -103,11 +103,11 @@
                         <i class="fa-solid fa-calendar-alt date-icon"></i>
                     </div>
                 </div>
-                <div class="control-group">
-                    <label>&nbsp;</label>
-                    <div>
-                        <button id="enviar-asistencias" class="btn btn-blue">Enviar Asistencias</button>
-                    </div>
+                <div class="control-group" style="align-self: flex-end;">
+                    <button id="marcar-todos-presentes" class="btn btn-blue marcar-todos-btn" type="button">Marcar todos como presentes</button>
+                </div>
+                <div class="control-group" style="align-self: flex-end;">
+                    <button id="enviar-asistencias" class="btn btn-blue">Enviar Asistencias</button>
                 </div>
             </div>
 

@@ -48,6 +48,9 @@
 	// ---- Lógica para cargar y mostrar alumnos del curso ----
 	const studentListContainer = document.querySelector('.student-list');
 
+	// Botón para marcar todos como presentes (ahora está en el HTML)
+	const marcarTodosBtn = document.getElementById('marcar-todos-presentes');
+
 	function createStatusHandlers(container) {
 		const statusButtons = container.querySelectorAll('.status-btn');
 		statusButtons.forEach(button => {
@@ -90,9 +93,9 @@
 				actions.className = 'attendance-actions';
 
 				actions.innerHTML = `
-					<button class="status-btn present-status"><i class="fa-solid fa-check"></i></button>
-					<button class="status-btn late-status"><i class="fa-solid fa-clock"></i></button>
-                    <button class="status-btn absent-status"><i class="fa-solid fa-xmark"></i></button>
+					<button class="status-btn present-status"><span class="status-letra">P</span><i class="fa-solid fa-check"></i></button>
+					<button class="status-btn late-status"><span class="status-letra">T</span><i class="fa-solid fa-clock"></i></button>
+					<button class="status-btn absent-status"><span class="status-letra">A</span><i class="fa-solid fa-xmark"></i></button>
 				`;
 
 				div.appendChild(nameSpan);
@@ -103,9 +106,23 @@
 			// Attach handlers
 			createStatusHandlers(studentListContainer);
 
-			// Set first student's present button active by default
-			const firstPresent = studentListContainer.querySelector('.student-item:first-child .present-status');
-			if (firstPresent) firstPresent.classList.add('active-status');
+			// Ya no marcar ninguno como presente por defecto
+
+			// Re-attach marcar todos handler (in case of reload)
+			if (marcarTodosBtn) {
+				marcarTodosBtn.onclick = function () {
+					const items = studentListContainer.querySelectorAll('.student-item');
+					items.forEach(item => {
+						const presentBtn = item.querySelector('.present-status');
+						if (presentBtn) {
+							// Remove active from all
+							const btns = item.querySelectorAll('.status-btn');
+							btns.forEach(btn => btn.classList.remove('active-status'));
+							presentBtn.classList.add('active-status');
+						}
+					});
+				};
+			}
 
 		} catch (err) {
 			console.error(err);
