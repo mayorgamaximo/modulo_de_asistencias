@@ -5,28 +5,17 @@
 
 	if (!anioSelect || !divisionSelect) return;
 
-	function apiPath(p) {
-		return `${location.origin.replace(/\/$/, '')}/${String(p).replace(/^\/+/, '')}`;
+	// Build module API helper so that requests always include /modulos/<slug>/ prefix resolved from current path
+	const slug = (window.location.pathname || '').split('/').filter(Boolean)[1] || '';
+	const moduleBase = slug ? `/modulos/${slug}` : '';
+	function moduleApi(p) {
+		const normalized = p.startsWith('/') ? p.slice(1) : p;
+		return `${moduleBase}/${normalized}`;
 	}
-
-	async function safeFetchJSON(url, opts) {
-		const res = await fetch(url, opts);
-		const text = await res.text();
-		let payload;
-		try { payload = text ? JSON.parse(text) : null; } catch (e) { payload = text; }
-		if (!res.ok) {
-			const message = payload && payload.error ? payload.error : String(payload || res.statusText);
-			throw new Error(message);
-		}
-		return payload;
-	}
-
-	let cursosCache = [];
-	let activeCursoId = null;
 
 	async function fetchCursos() {
 		try {
-			const res = await fetch(apiPath('api/cursos'));
+			const res = await fetch(moduleApi('api/cursos'));
 			if (!res.ok) throw new Error('Error fetching cursos');
 			return await res.json();
 		} catch (err) {
@@ -60,7 +49,6 @@
 	}
 
 	function dispatchCursoChanged(id_curso) {
-		activeCursoId = id_curso;
 		const ev = new CustomEvent('cursoChanged', { detail: { id_curso } });
 		document.dispatchEvent(ev);
 	}
@@ -88,9 +76,8 @@
 	async function loadStudents(id_curso) {
 		if (!id_curso) return;
 		if (!studentListContainer) return;
-		activeCursoId = id_curso;
 		try {
-			const res = await fetch(apiPath(`api/lista?id_curso=${encodeURIComponent(id_curso)}`));
+			const res = await fetch(moduleApi(`api/lista?id_curso=${encodeURIComponent(id_curso)}`));
 			if (!res.ok) throw new Error('Error fetching students');
 			const students = await res.json();
 
@@ -198,13 +185,26 @@
 		try {
 			enviarBtn.disabled = true;
 			enviarBtn.textContent = 'Enviando...';
-			const data = await safeFetchJSON(apiPath('api/asistencias'), { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ fecha, entries, turno }) });
-			// dispatch event so historial can refresh
-			// prefer activeCursoId to avoid refetching cursos
-			let cursoId = activeCursoId;
-			if (!cursoId && Array.isArray(cursosCache) && cursosCache.length > 0) {
-				cursoId = findCursoId(cursosCache, anioSelect.value, divisionSelect.value);
+			const res = await fetch(moduleApi('api/asistencias'), {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ fecha, entries, turno })
+			});
+			// Try parsing JSON only if the server returns JSON.
+			let data;
+			const contentType = res.headers.get('content-type') || '';
+			if (contentType.includes('application/json')) {
+				try { data = await res.json(); }
+				catch (e) { console.error('[CLIENT] Error parsing JSON from response', e); data = null; }
+			} else {
+				// Not JSON: log the text response for debugging and create a placeholder
+				const text = await res.text();
+				console.warn('[CLIENT] Non-JSON response from server:', text);
+				data = { error: `Server responded with non-JSON (${res.status})` };
 			}
+			if (!res.ok) throw new Error((data && data.error) || `Error al guardar (HTTP ${res.status})`);
+			// dispatch event so historial can refresh
+			const cursoId = findCursoId(await fetchCursos(), anioSelect.value, divisionSelect.value);
 			const ev = new CustomEvent('asistenciasSaved', { detail: { fecha, cursoId, turno } });
 			document.dispatchEvent(ev);
 			alert('Asistencias guardadas correctamente.');
@@ -218,13 +218,12 @@
 	}
 
 	if (enviarBtn) {
-		enviarBtn.addEventListener('click', enviarAsistencias);
+		enviarBtn.addEventListener('click', (e) => { e.preventDefault(); enviarAsistencias(); });
 	}
 
 	// Inicialización
 	(async function init() {
-			const cursos = await fetchCursos();
-		cursosCache = cursos || [];
+		const cursos = await fetchCursos();
 
 		if (!cursos || cursos.length === 0) {
 			fillSelect(anioSelect, [], 'No hay cursos');

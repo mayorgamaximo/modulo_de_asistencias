@@ -14,20 +14,9 @@
         return `${yyyy}-${mm}-${dd}`;
     }
 
-    function apiPath(p) {
-        return `${location.origin.replace(/\/$/, '')}/${String(p).replace(/^\/+/, '')}`;
-    }
-    async function safeFetchJSON(url, opts) {
-        const res = await fetch(url, opts);
-        const text = await res.text();
-        let payload;
-        try { payload = text ? JSON.parse(text) : null; } catch (e) { payload = text; }
-        if (!res.ok) {
-            const message = payload && payload.error ? payload.error : String(payload || res.statusText);
-            throw new Error(message);
-        }
-        return payload;
-    }
+    const slug = (window.location.pathname || '').split('/').filter(Boolean)[1] || '';
+    const moduleBase = slug ? `/modulos/${slug}` : '';
+    function moduleApi(p) { const normalized = p.startsWith('/') ? p.slice(1) : p; return `${moduleBase}/${normalized}`; }
 
     async function loadDashboard() {
         // reset to 0 while loading
@@ -37,7 +26,9 @@
 
         const fecha = getTodayISO();
         try {
-            const sessions = await safeFetchJSON(apiPath(`api/historial?fecha=${encodeURIComponent(fecha)}`));
+            const res = await fetch(moduleApi(`api/historial?fecha=${encodeURIComponent(fecha)}`));
+            if (!res.ok) throw new Error('Error fetching historial para dashboard');
+            const sessions = await res.json();
 
             let present = 0, absent = 0, late = 0;
             // sumar alumno por estado
@@ -80,7 +71,9 @@
     const courseGrid = document.querySelector('.course-grid');
     async function fetchCursos() {
         try {
-            return await safeFetchJSON(apiPath('api/cursos'));
+            const r = await fetch(moduleApi('api/cursos'));
+            if (!r.ok) throw new Error('Error al obtener cursos');
+            return await r.json();
         } catch (err) {
             console.error(err);
             return [];
@@ -89,7 +82,9 @@
 
     async function fetchLista(id_curso) {
         try {
-            return await safeFetchJSON(apiPath(`api/lista?id_curso=${encodeURIComponent(id_curso)}`));
+            const r = await fetch(moduleApi(`api/lista?id_curso=${encodeURIComponent(id_curso)}`));
+            if (!r.ok) throw new Error('Error al obtener lista');
+            return await r.json();
         } catch (err) {
             console.error(err);
             return [];

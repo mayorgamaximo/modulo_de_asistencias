@@ -1,19 +1,5 @@
 // Módulo para mostrar historial de asistencias en tarjetas
 (function () {
-    function apiPath(p) {
-        return `${location.origin.replace(/\/$/, '')}/${String(p).replace(/^\/+/, '')}`;
-    }
-    async function safeFetchJSON(url, opts) {
-        const res = await fetch(url, opts);
-        const text = await res.text();
-        let payload;
-        try { payload = text ? JSON.parse(text) : null; } catch (e) { payload = text; }
-        if (!res.ok) {
-            const message = payload && payload.error ? payload.error : String(payload || res.statusText);
-            throw new Error(message);
-        }
-        return payload;
-    }
     const container = document.querySelector('#historial .historial-list');
     if (!container) return;
     const anioSelect = document.getElementById('hist-filter-anio');
@@ -82,6 +68,10 @@
         return card;
     }
 
+    const slug = (window.location.pathname || '').split('/').filter(Boolean)[1] || '';
+    const moduleBase = slug ? `/modulos/${slug}` : '';
+    function moduleApi(p) { const normalized = p.startsWith('/') ? p.slice(1) : p; return `${moduleBase}/${normalized}`; }
+
     async function loadHistorial() {
         container.innerHTML = '<div class="loading">Cargando historial...</div>';
         try {
@@ -92,8 +82,10 @@
             if (fechaInput && fechaInput.value) params.append('fecha', fechaInput.value);
             if (turnoSelect && turnoSelect.value) params.append('turno', turnoSelect.value);
 
-            const url = apiPath('api/historial') + (params.toString() ? `?${params.toString()}` : '');
-            const sessions = await safeFetchJSON(url);
+            const url = moduleApi('api/historial') + (params.toString() ? `?${params.toString()}` : '');
+            const res = await fetch(url);
+            if (!res.ok) throw new Error('Error fetching historial');
+            const sessions = await res.json();
 
             container.innerHTML = '';
             if (!sessions || sessions.length === 0) {
@@ -115,8 +107,9 @@
     document.addEventListener('DOMContentLoaded', async () => {
         // poblar selects de filtros (usando /api/cursos)
         try {
-            const cursos = await safeFetchJSON(apiPath('api/cursos'));
-            if (cursos) {
+            const r = await fetch(moduleApi('api/cursos'));
+            if (r.ok) {
+                const cursos = await r.json();
                 const anios = Array.from(new Set(cursos.map(c => String(c.anio))));
                 const divisiones = Array.from(new Set(cursos.map(c => String(c.division))));
                 if (anioSelect) {

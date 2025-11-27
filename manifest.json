@@ -1,0 +1,9 @@
+{
+  "name": "modulo-asistencias",
+  "slug": "modulo-asistencias",
+  "language": "node",
+  "start": "npm",
+  "args": ["run", "start"],
+  "cwd": "modulo_de_asistencias",
+  "healthPath": "/health"
+}

@@ -7,6 +7,11 @@ const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(express.json());
+// Request logging to help debug incoming requests (method + path)
+app.use((req, _res, next) => {
+  console.log(`[MOD-LOG] ${new Date().toISOString()} ${req.method} ${req.path}`);
+  next();
+});
 app.use(express.static(path.join(__dirname, 'public')));
 
 // 📦 Conexión a la base de datos
@@ -14,7 +19,7 @@ const db = mysql.createConnection({
   host: 'localhost',
   user: 'root',             
   password: '',             
-  database: 'modulo_gestion'
+  database: 'contenedor'
 });
 
 // Probar conexión
@@ -77,8 +82,20 @@ app.get('/api/cursos', (req, res) => {
 });
 
 // Guardar múltiples asistencias para una fecha
+// Opciones / preflight
+app.options('/api/asistencias', (req, res) => {
+  res.set('Allow', 'POST, OPTIONS');
+  return res.status(200).json({ ok: true });
+});
+
+// Manejar GET con respuesta JSON para evitar responses HTML (y permitir debug)
+app.get('/api/asistencias', (req, res) => {
+  return res.status(405).json({ error: 'Method Not Allowed: use POST to submit asistencias' });
+});
+
 app.post('/api/asistencias', (req, res) => {
   const { fecha, entries, turno } = req.body; // entries: [{ id_alumno, estado }]
+  console.log('[MOD-LOG] POST /api/asistencias', { fecha, turno, entriesLength: Array.isArray(entries) ? entries.length : 0 });
 
   if (!fecha || !Array.isArray(entries) || !turno) {
     return res.status(400).json({ error: 'Payload inválido. Se requiere fecha, turno y entries.' });
