@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 24-11-2025 a las 08:09:46
+-- Tiempo de generación: 27-11-2025 a las 20:40:21
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -34,6 +34,22 @@ CREATE TABLE `asistencias` (
   `turno` varchar(10) NOT NULL,
   `estado` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `asistencias`
+--
+
+INSERT INTO `asistencias` (`id`, `id_alumno`, `fecha_de_asistencias`, `turno`, `estado`) VALUES
+(19, 2, '2025-11-24', 'tarde', 'presente'),
+(20, 1, '2025-11-24', 'tarde', 'presente'),
+(21, 2, '2025-11-24', 'vespertino', 'presente'),
+(22, 1, '2025-11-24', 'vespertino', 'presente'),
+(24, 3, '2025-11-24', 'mañana', 'presente'),
+(25, 3, '2025-11-25', 'mañana', 'presente'),
+(29, 2, '2025-11-27', 'mañana', 'tarde'),
+(30, 1, '2025-11-27', 'mañana', 'presente'),
+(31, 3, '2025-11-27', 'tarde', 'presente'),
+(33, 3, '2025-11-27', 'mañana', 'ausente');
 
 -- --------------------------------------------------------
 
@@ -166,7 +182,7 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `asistencias`
 --
 ALTER TABLE `asistencias`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT de la tabla `cursos`

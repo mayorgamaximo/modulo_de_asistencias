@@ -42,12 +42,13 @@ navItems.forEach(btn => {
 
 
 document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('dashboard').classList.add('hidden');
-    document.getElementById('asistencia').classList.remove('hidden');
+    // Show Dashboard by default
+    document.getElementById('dashboard').classList.remove('hidden');
+    document.getElementById('asistencia').classList.add('hidden');
+    document.getElementById('historial').classList.add('hidden');
 
-
-    document.querySelector('[data-section="dashboard"]').classList.remove('active');
-    document.querySelector('[data-section="asistencia"]').classList.add('active');
+    document.querySelector('[data-section="dashboard"]').classList.add('active');
+    document.querySelector('[data-section="asistencia"]').classList.remove('active');
 
 
     if (dateInput) {

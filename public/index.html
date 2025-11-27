@@ -21,18 +21,16 @@
 
     <div class="container">
         <aside class="sidebar">
-            <button class="nav-item" data-section="dashboard">
+            <button class="nav-item active" data-section="dashboard">
                 <i class="fa-solid fa-user"></i> Dashboard
             </button>
-            <button class="nav-item active" data-section="asistencia">
+            <button class="nav-item" data-section="asistencia">
                 <i class="fa-solid fa-calendar-check"></i> Tomar Asistencia
             </button>
             <button class="nav-item" data-section="historial">
                 <i class="fa-solid fa-file-lines"></i> Historial
             </button>
-            <button class="nav-item" data-section="configuracion">
-                <i class="fa-solid fa-gear"></i> Configuración
-            </button>
+            
         </aside>
 
 
@@ -43,15 +41,15 @@
                     <h2>142</h2>
                     <i class="fa-solid fa-check"></i>
                 </div>
-                <div class="card absent">
-                    <p>Ausentes Hoy</p>
-                    <h2>12</h2>
-                    <i class="fa-solid fa-xmark"></i>
-                </div>
                 <div class="card late">
                     <p>Llegadas Tarde</p>
                     <h2>8</h2>
                     <i class="fa-solid fa-clock"></i>
+                </div>
+                <div class="card absent">
+                    <p>Ausentes Hoy</p>
+                    <h2>12</h2>
+                    <i class="fa-solid fa-xmark"></i>
                 </div>
             </div>
             <div class="courses">
@@ -171,29 +169,13 @@
         </main>
 
 
-        <main class="content hidden" id="configuracion">
-            <h2>Configuración del Sistema</h2>
-
-            <div class="config-section">
-                <h3>Gestión de Cursos</h3>
-                <button class="btn btn-blue">Agregar Nuevo Curso</button>
-            </div>
-
-            <hr>
-
-            <div class="config-section">
-                <h3>Gestión de preceptores</h3>
-                <button class="btn btn-green">Agregar preceptor</button>
-                
-            </div>
-        </main>
-
     </div>
 
 
     <script src="index.js"></script>
-    <script src="modulos/tomar_asistencia.js"></script>
-    <script src="modulos/historial.js"></script>
+    <script src="dashboard.js"></script>
+    <script src="tomar_asistencia.js"></script>
+    <script src="historial.js"></script>
 </body>
 
 </html>

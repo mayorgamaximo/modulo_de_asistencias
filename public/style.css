@@ -495,22 +495,6 @@ header .logo i {
 }
 
 
-.config-section {
-    margin-bottom: 1.8rem;
-}
-
-.config-section h3 {
-    font-size: 16px;
-    font-weight: 600;
-    color: #1e293b;
-    margin-bottom: 10px;
-}
-
-.config-section button {
-    margin-right: 10px;
-    margin-top: 5px;
-}
-
 .btn {
     border: none;
     border-radius: 8px;
@@ -548,7 +532,7 @@ hr {
 .historial-list {
     display: flex;
     flex-direction: column;
-    gap: 18px; /* más espacio vertical entre tarjetas */
+    gap: 18px;
     margin-top: 8px;
 }
 
@@ -584,7 +568,7 @@ hr {
 .hist-cell.name { font-weight: 600; color: #0f172a; }
 .hist-cell.estado { color: #334155; }
 
-/* Dark card + inner white box style (like the provided mock) */
+
 .card-dark {
     background: #0b1220; /* dark */
     border: 1px solid rgba(255,255,255,0.12);
@@ -602,7 +586,7 @@ hr {
 .course-date { font-size: 13px; color: #64748b; }
 
 .historial-inner-box {
-    background: #f8fafc; /* tono claro consistente con la página */
+    background: #f8fafc;
     margin: 12px 12px 12px 12px;
     padding: 12px;
     border-radius: 6px;
