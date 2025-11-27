@@ -1,4 +1,4 @@
-// Dashboard: reemplazar los datos estáticos por datos reales consultando /api/historial
+// Dashboard: reemplazar los datos estáticos por datos reales consultando api/historial
 (function () {
     const presentCard = document.querySelector('.card.present h2');
     const absentCard = document.querySelector('.card.absent h2');
@@ -22,7 +22,7 @@
 
         const fecha = getTodayISO();
         try {
-            const res = await fetch(`/api/historial?fecha=${encodeURIComponent(fecha)}`);
+            const res = await fetch(`api/historial?fecha=${encodeURIComponent(fecha)}`);
             if (!res.ok) throw new Error('Error fetching historial para dashboard');
             const sessions = await res.json();
 
@@ -67,7 +67,7 @@
     const courseGrid = document.querySelector('.course-grid');
     async function fetchCursos() {
         try {
-            const r = await fetch('/api/cursos');
+            const r = await fetch('api/cursos');
             if (!r.ok) throw new Error('Error al obtener cursos');
             return await r.json();
         } catch (err) {
@@ -78,7 +78,7 @@
 
     async function fetchLista(id_curso) {
         try {
-            const r = await fetch(`/api/lista?id_curso=${encodeURIComponent(id_curso)}`);
+            const r = await fetch(`api/lista?id_curso=${encodeURIComponent(id_curso)}`);
             if (!r.ok) throw new Error('Error al obtener lista');
             return await r.json();
         } catch (err) {

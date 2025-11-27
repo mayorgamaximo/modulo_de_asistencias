@@ -78,7 +78,7 @@
             if (fechaInput && fechaInput.value) params.append('fecha', fechaInput.value);
             if (turnoSelect && turnoSelect.value) params.append('turno', turnoSelect.value);
 
-            const url = '/api/historial' + (params.toString() ? `?${params.toString()}` : '');
+            const url = 'api/historial' + (params.toString() ? `?${params.toString()}` : '');
             const res = await fetch(url);
             if (!res.ok) throw new Error('Error fetching historial');
             const sessions = await res.json();
@@ -103,7 +103,7 @@
     document.addEventListener('DOMContentLoaded', async () => {
         // poblar selects de filtros (usando /api/cursos)
         try {
-            const r = await fetch('/api/cursos');
+            const r = await fetch('api/cursos');
             if (r.ok) {
                 const cursos = await r.json();
                 const anios = Array.from(new Set(cursos.map(c => String(c.anio))));
