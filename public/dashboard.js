@@ -14,6 +14,21 @@
         return `${yyyy}-${mm}-${dd}`;
     }
 
+    function apiPath(p) {
+        return `${location.origin.replace(/\/$/, '')}/${String(p).replace(/^\/+/, '')}`;
+    }
+    async function safeFetchJSON(url, opts) {
+        const res = await fetch(url, opts);
+        const text = await res.text();
+        let payload;
+        try { payload = text ? JSON.parse(text) : null; } catch (e) { payload = text; }
+        if (!res.ok) {
+            const message = payload && payload.error ? payload.error : String(payload || res.statusText);
+            throw new Error(message);
+        }
+        return payload;
+    }
+
     async function loadDashboard() {
         // reset to 0 while loading
         presentCard.textContent = '0';
@@ -22,9 +37,7 @@
 
         const fecha = getTodayISO();
         try {
-            const res = await fetch(`/api/historial?fecha=${encodeURIComponent(fecha)}`);
-            if (!res.ok) throw new Error('Error fetching historial para dashboard');
-            const sessions = await res.json();
+            const sessions = await safeFetchJSON(apiPath(`api/historial?fecha=${encodeURIComponent(fecha)}`));
 
             let present = 0, absent = 0, late = 0;
             // sumar alumno por estado
@@ -67,9 +80,7 @@
     const courseGrid = document.querySelector('.course-grid');
     async function fetchCursos() {
         try {
-            const r = await fetch('/api/cursos');
-            if (!r.ok) throw new Error('Error al obtener cursos');
-            return await r.json();
+            return await safeFetchJSON(apiPath('api/cursos'));
         } catch (err) {
             console.error(err);
             return [];
@@ -78,9 +89,7 @@
 
     async function fetchLista(id_curso) {
         try {
-            const r = await fetch(`/api/lista?id_curso=${encodeURIComponent(id_curso)}`);
-            if (!r.ok) throw new Error('Error al obtener lista');
-            return await r.json();
+            return await safeFetchJSON(apiPath(`api/lista?id_curso=${encodeURIComponent(id_curso)}`));
         } catch (err) {
             console.error(err);
             return [];

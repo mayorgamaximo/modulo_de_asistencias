@@ -5,9 +5,28 @@
 
 	if (!anioSelect || !divisionSelect) return;
 
+	function apiPath(p) {
+		return `${location.origin.replace(/\/$/, '')}/${String(p).replace(/^\/+/, '')}`;
+	}
+
+	async function safeFetchJSON(url, opts) {
+		const res = await fetch(url, opts);
+		const text = await res.text();
+		let payload;
+		try { payload = text ? JSON.parse(text) : null; } catch (e) { payload = text; }
+		if (!res.ok) {
+			const message = payload && payload.error ? payload.error : String(payload || res.statusText);
+			throw new Error(message);
+		}
+		return payload;
+	}
+
+	let cursosCache = [];
+	let activeCursoId = null;
+
 	async function fetchCursos() {
 		try {
-			const res = await fetch('/api/cursos');
+			const res = await fetch(apiPath('api/cursos'));
 			if (!res.ok) throw new Error('Error fetching cursos');
 			return await res.json();
 		} catch (err) {
@@ -41,6 +60,7 @@
 	}
 
 	function dispatchCursoChanged(id_curso) {
+		activeCursoId = id_curso;
 		const ev = new CustomEvent('cursoChanged', { detail: { id_curso } });
 		document.dispatchEvent(ev);
 	}
@@ -68,8 +88,9 @@
 	async function loadStudents(id_curso) {
 		if (!id_curso) return;
 		if (!studentListContainer) return;
+		activeCursoId = id_curso;
 		try {
-			const res = await fetch(`/api/lista?id_curso=${encodeURIComponent(id_curso)}`);
+			const res = await fetch(apiPath(`api/lista?id_curso=${encodeURIComponent(id_curso)}`));
 			if (!res.ok) throw new Error('Error fetching students');
 			const students = await res.json();
 
@@ -177,15 +198,13 @@
 		try {
 			enviarBtn.disabled = true;
 			enviarBtn.textContent = 'Enviando...';
-			const res = await fetch('/api/asistencias', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ fecha, entries, turno })
-			});
-			const data = await res.json();
-			if (!res.ok) throw new Error(data.error || 'Error al guardar');
+			const data = await safeFetchJSON(apiPath('api/asistencias'), { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ fecha, entries, turno }) });
 			// dispatch event so historial can refresh
-			const cursoId = findCursoId(await fetchCursos(), anioSelect.value, divisionSelect.value);
+			// prefer activeCursoId to avoid refetching cursos
+			let cursoId = activeCursoId;
+			if (!cursoId && Array.isArray(cursosCache) && cursosCache.length > 0) {
+				cursoId = findCursoId(cursosCache, anioSelect.value, divisionSelect.value);
+			}
 			const ev = new CustomEvent('asistenciasSaved', { detail: { fecha, cursoId, turno } });
 			document.dispatchEvent(ev);
 			alert('Asistencias guardadas correctamente.');
@@ -204,7 +223,8 @@
 
 	// Inicialización
 	(async function init() {
-		const cursos = await fetchCursos();
+			const cursos = await fetchCursos();
+		cursosCache = cursos || [];
 
 		if (!cursos || cursos.length === 0) {
 			fillSelect(anioSelect, [], 'No hay cursos');
