@@ -27,7 +27,7 @@ db.connect(err => {
 });
 
 // 🧠 Ruta para obtener todos los estudiantes
-app.get('api/estudiantes', (req, res) => {
+app.get('/api/estudiantes', (req, res) => {
   db.query('SELECT * FROM usuarios', (err, results) => {
     
     if (err) return res.status(500).json({ error: 'Error al obtener estudiantes' });
@@ -65,7 +65,7 @@ app.get('/api/lista', (req, res) => {
 });
 
 // 🌐 Ruta para obtener los cursos (anio y division)
-app.get('api/cursos', (req, res) => {
+app.get('/api/cursos', (req, res) => {
   const sql = 'SELECT * FROM cursos ORDER BY anio, division';
   db.query(sql, (err, results) => {
     if (err) {
@@ -77,7 +77,7 @@ app.get('api/cursos', (req, res) => {
 });
 
 // Guardar múltiples asistencias para una fecha
-app.post('api/asistencias', (req, res) => {
+app.post('/api/asistencias', (req, res) => {
   const { fecha, entries, turno } = req.body; // entries: [{ id_alumno, estado }]
 
   if (!fecha || !Array.isArray(entries) || !turno) {
@@ -119,7 +119,7 @@ app.post('api/asistencias', (req, res) => {
 });
 
   // Obtener historial agrupado por curso y fecha
-  app.get('api/historial', (req, res) => {
+  app.get('/api/historial', (req, res) => {
     // filtros opcionales: anio, division, id_curso, fecha (YYYY-MM-DD o DD/MM/YYYY), turno
     const { anio, division, id_curso, fecha, turno } = req.query;
 
@@ -199,7 +199,7 @@ app.post('api/asistencias', (req, res) => {
   });
 
 // ➕ Ruta para agregar un nuevo estudiante
-app.post('api/estudiantes', (req, res) => {
+app.post('/api/estudiantes', (req, res) => {
   const { nombre, apellido, curso } = req.body;
   const sql = 'INSERT INTO estudiantes (nombre, apellido, curso) VALUES (?, ?, ?)';
   db.query(sql, [nombre, apellido, curso], (err, result) => {

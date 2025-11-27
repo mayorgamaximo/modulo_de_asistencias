@@ -7,7 +7,7 @@
 
 	async function fetchCursos() {
 		try {
-			const res = await fetch('api/cursos');
+			const res = await fetch('/api/cursos');
 			if (!res.ok) throw new Error('Error fetching cursos');
 			return await res.json();
 		} catch (err) {
@@ -69,7 +69,7 @@
 		if (!id_curso) return;
 		if (!studentListContainer) return;
 		try {
-			const res = await fetch(`api/lista?id_curso=${encodeURIComponent(id_curso)}`);
+			const res = await fetch(`/api/lista?id_curso=${encodeURIComponent(id_curso)}`);
 			if (!res.ok) throw new Error('Error fetching students');
 			const students = await res.json();
 
@@ -177,7 +177,7 @@
 		try {
 			enviarBtn.disabled = true;
 			enviarBtn.textContent = 'Enviando...';
-			const res = await fetch('api/asistencias', {
+			const res = await fetch('/api/asistencias', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({ fecha, entries, turno })
