@@ -52,7 +52,11 @@ app.get('/api/lista', (req, res) => {
   // Suponemos que existe la tabla `lista` con columnas `id_curso` y `id_alumno`
   // y que la tabla `usuarios` contiene los datos del alumno (id, nombre, apellido)
   const sql = `
-    SELECT u.id AS id_alumno, u.nombres, u.apellidos
+    SELECT 
+      l.id AS id,          -- id real de la tabla listas (FK usada por asistencias)
+      u.id AS id_alumno,   -- id del usuario (informativo)
+      u.nombres, 
+      u.apellidos
     FROM listas l
     JOIN usuarios u ON l.id_alumno = u.id
     WHERE l.id_curso = ? AND u.rol = 'alumno'
@@ -95,7 +99,6 @@ app.get('/api/asistencias', (req, res) => {
 
 app.post('/api/asistencias', (req, res) => {
   const { fecha, entries, turno } = req.body; // entries: [{ id_alumno, estado }]
-  console.log('[MOD-LOG] POST /api/asistencias', { fecha, turno, entriesLength: Array.isArray(entries) ? entries.length : 0 });
 
   if (!fecha || !Array.isArray(entries) || !turno) {
     return res.status(400).json({ error: 'Payload inválido. Se requiere fecha, turno y entries.' });
@@ -176,15 +179,22 @@ app.post('/api/asistencias', (req, res) => {
     const whereClause = where.length ? `WHERE ${where.join(' AND ')}` : '';
 
     const sql = `
-      SELECT c.id AS id_curso, c.anio, c.division,
-             a.fecha_de_asistencias AS fecha, a.turno AS turno,
-             u.id AS id_alumno, u.nombres, u.apellidos, a.estado
-      FROM asistencias a
-      JOIN usuarios u ON a.id_alumno = u.id
-      JOIN listas l ON l.id_alumno = u.id
-      JOIN cursos c ON l.id_curso = c.id
-      ${whereClause}
-      ORDER BY a.fecha_de_asistencias DESC, c.anio, c.division, a.turno, u.apellidos
+      SELECT 
+      c.id AS id_curso, 
+      c.anio, 
+      c.division,
+      a.fecha_de_asistencias AS fecha, 
+      a.turno AS turno,
+      l.id AS id_alumno,
+      u.nombres, 
+      u.apellidos, 
+      a.estado
+    FROM asistencias a
+    JOIN listas   l ON a.id_alumno = l.id
+    JOIN usuarios u ON l.id_alumno = u.id
+    JOIN cursos   c ON l.id_curso = c.id
+    ${whereClause}
+    ORDER BY a.fecha_de_asistencias DESC, c.anio, c.division, a.turno, u.apellidos
     `;
 
     db.query(sql, params, (err, results) => {

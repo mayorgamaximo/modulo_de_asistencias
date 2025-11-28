@@ -96,7 +96,8 @@
 				const last = s.apellidos ?? s.apellido ?? '';
 				const first = s.nombres ?? s.nombre ?? '';
 				nameSpan.textContent = `${last}, ${first}`.trim().replace(/^,|,$/g, '');
-				if (s.id_alumno) div.dataset.idAlumno = s.id_alumno;
+				// usar siempre el id de la tabla listas como id_alumno para asistencias
+				div.dataset.idAlumno = s.id;
 				const actions = document.createElement('div');
 				actions.className = 'attendance-actions';
 
